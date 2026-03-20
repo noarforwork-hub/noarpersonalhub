@@ -31,9 +31,10 @@ export default function LandingPage() {
         borderBottom: `1px solid ${COLORS.lightGray}`,
         background: COLORS.white,
       }}>
-        <span style={{ color: COLORS.green, fontWeight: 600, fontSize: 14, letterSpacing: '.04em' }}>
-          Noar Personal Hub
-        </span>
+        <a href="/" style={{ textDecoration: 'none', fontWeight: 700, fontSize: 18, letterSpacing: '.04em' }}>
+          <span style={{ color: COLORS.blackLight }}>N</span>
+          <span style={{ color: COLORS.green }}>PH</span>
+        </a>
         <a href="/login" style={{
           fontSize: 12, padding: '5px 16px',
           border: `1px solid ${COLORS.green}`, borderRadius: 8,

@@ -421,7 +421,10 @@ export default function CvClient() {
 
       {/* NAVBAR */}
       <nav style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 24px', borderBottom: `1px solid ${COLORS.lightGray}`, background: COLORS.white, position: 'sticky', top: 0, zIndex: 10 }}>
-        <span style={{ color: COLORS.green, fontWeight: 600, letterSpacing: '.04em', fontSize: 14 }}>Noar Personal Hub</span>
+        <a href="/" style={{ textDecoration: 'none', fontWeight: 700, fontSize: 18, letterSpacing: '.04em' }}>
+          <span style={{ color: COLORS.blackLight }}>N</span>
+          <span style={{ color: COLORS.green }}>PH</span>
+        </a>
         <div style={{ display: 'flex', gap: 4, background: COLORS.offWhite, padding: '3px', borderRadius: 10, border: `1px solid ${COLORS.lightGray}` }}>
           <button onClick={() => setActiveTab('cv')} style={{ padding: '5px 16px', borderRadius: 8, fontSize: 12, cursor: 'pointer', border: 'none', letterSpacing: '.04em', textTransform: 'uppercase', background: activeTab === 'cv' ? COLORS.green : 'transparent', color: activeTab === 'cv' ? COLORS.white : COLORS.mediumGray, fontWeight: 500, transition: 'all .2s' }}>CV</button>
           {user && <button onClick={() => setActiveTab('logs')} style={{ padding: '5px 16px', borderRadius: 8, fontSize: 12, cursor: 'pointer', border: 'none', letterSpacing: '.04em', textTransform: 'uppercase', background: activeTab === 'logs' ? COLORS.green : 'transparent', color: activeTab === 'logs' ? COLORS.white : COLORS.mediumGray, fontWeight: 500, transition: 'all .2s' }}>Logs</button>}
