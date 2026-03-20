@@ -150,7 +150,7 @@ export default function DashboardPage() {
       }}>
         <span style={{ color: '#22C55E', fontWeight: 600, letterSpacing: '.04em', fontSize: 14 }}>Noar Personal Hub</span>
         <div style={{ display: 'flex', gap: 4, background: '#F8FAF8', padding: '3px', borderRadius: 10, border: '1px solid #E8EBE8' }}>
-          <a href="/" style={{ display: 'inline-block', padding: '5px 16px', borderRadius: 8, fontSize: 12, cursor: 'pointer', border: 'none', letterSpacing: '.04em', textTransform: 'uppercase' as const, background: 'transparent', color: '#9CA39C', fontWeight: 500, textDecoration: 'none', lineHeight: '20px' }}>CV</a>
+          <a href="/cv" style={{ display: 'inline-block', padding: '5px 16px', borderRadius: 8, fontSize: 12, cursor: 'pointer', border: 'none', letterSpacing: '.04em', textTransform: 'uppercase' as const, background: 'transparent', color: '#9CA39C', fontWeight: 500, textDecoration: 'none', lineHeight: '20px' }}>CV</a>
           <span style={{ display: 'inline-block', padding: '5px 16px', borderRadius: 8, fontSize: 12, letterSpacing: '.04em', textTransform: 'uppercase' as const, background: '#22C55E', color: '#FFFFFF', fontWeight: 500, lineHeight: '20px' }}>Logs</span>
         </div>
         <button onClick={handleLogout} style={{

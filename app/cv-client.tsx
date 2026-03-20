@@ -278,6 +278,7 @@ export default function CvClient() {
   async function handleLogout() {
     if (supabase) await supabase.auth.signOut()
     setUser(null); setActiveTab('cv'); setEditMode(false)
+    window.location.href = '/'
   }
 
   function openPanel(section: string) {

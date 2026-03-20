@@ -113,7 +113,7 @@ export default function LoginPage() {
         </button>
 
         <p style={{ fontSize: 12, marginTop: 20, textAlign: 'center' }}>
-          <a href="/" style={{ color: '#22C55E', textDecoration: 'none', fontWeight: 500 }}>← กลับหน้า CV</a>
+          <a href="/cv" style={{ color: '#22C55E', textDecoration: 'none', fontWeight: 500 }}>← กลับหน้า CV</a>
         </p>
       </div>
     </div>
