@@ -1,6 +1,14 @@
 {
+  "/_not-found": "app/_not-found.js",
+  "/api/auth/google/callback/route": "app/api/auth/google/callback/route.js",
+  "/api/snippets/route": "app/api/snippets/route.js",
+  "/api/schedules/route": "app/api/schedules/route.js",
+  "/cv/page": "app/cv/page.js",
   "/dashboard/page": "app/dashboard/page.js",
-  "/page": "app/page.js",
+  "/api/tasks/route": "app/api/tasks/route.js",
+  "/login/page": "app/login/page.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/login/page": "app/login/page.js"
+  "/tasks/page": "app/tasks/page.js",
+  "/page": "app/page.js",
+  "/snippets/page": "app/snippets/page.js"
 }
