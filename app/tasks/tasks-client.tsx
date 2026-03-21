@@ -306,12 +306,15 @@ export default function TasksClient() {
 
             {/* ---- NAVBAR ---- */}
             <nav style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 24px', borderBottom: `1px solid ${C.gray}`, background: C.white, position: 'sticky', top: 0, zIndex: 10 }}>
-                <div style={{ width: 34, height: 34, borderRadius: '50%', background: C.green, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 700, color: '#fff' }}>NPH</div>
-                <div style={{ display: 'flex', gap: 3, background: C.off, padding: '3px', borderRadius: 10, border: `1px solid ${C.gray}` }}>
-                    <a href="/" style={{ padding: '5px 14px', borderRadius: 7, fontSize: 11, color: C.muted, textDecoration: 'none', fontWeight: 500 }}>CV</a>
-                    <a href="/dashboard" style={{ padding: '5px 14px', borderRadius: 7, fontSize: 11, color: C.muted, textDecoration: 'none', fontWeight: 500 }}>Logs</a>
-                    <span style={{ padding: '5px 14px', borderRadius: 7, fontSize: 11, background: C.green, color: '#fff', fontWeight: 500 }}>Tasks</span>
-                </div>
+                <a href="/" style={{ textDecoration: 'none' }}>
+          <div style={{ width: 34, height: 34, borderRadius: '50%', background: C.green, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 700, color: '#fff' }}>NPH</div>
+        </a>
+        <div style={{ display: 'flex', gap: 3, background: C.off, padding: '3px', borderRadius: 10, border: `1px solid ${C.gray}` }}>
+          <a href="/cv" style={{ padding: '5px 14px', borderRadius: 7, fontSize: 11, background: 'transparent', color: 'C.muted', textDecoration: 'none', fontWeight: 500 }}>CV</a>
+          <a href="/dashboard" style={{ padding: '5px 14px', borderRadius: 7, fontSize: 11, background: 'transparent', color: 'C.muted', textDecoration: 'none', fontWeight: 500 }}>Logs</a>
+          <a href="/tasks" style={{ padding: '5px 14px', borderRadius: 7, fontSize: 11, background: 'C.green', color: '#fff', textDecoration: 'none', fontWeight: 500 }}>Tasks</a>
+          <a href="/snippets" style={{ padding: '5px 14px', borderRadius: 7, fontSize: 11, background: 'transparent', color: 'C.muted', textDecoration: 'none', fontWeight: 500 }}>Snippets</a>
+        </div>
                 <span style={{ fontSize: 12, color: C.muted }}>{user?.email}</span>
             </nav>
 
