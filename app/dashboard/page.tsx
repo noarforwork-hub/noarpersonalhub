@@ -3,6 +3,13 @@ import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 
+const C = {
+  white: '#FFFFFF', off: '#F8FAF8', gray: '#E8EBE8',
+  muted: '#9CA39C', green: '#22C55E', gd: '#16A34A',
+  gl: '#4ADE80', gm: '#DCFCE7',
+  black: '#0A0A0A', text: '#171717', bm: '#262626',
+}
+
 type Log = {
   id: string
   flow_name: string
@@ -13,17 +20,17 @@ type Log = {
 }
 
 const STATUS_STYLE: Record<string, any> = {
-  success: { background: '#ecfdf5', color: '#059669', border: '1px solid #a7f3d0' },
-  error:   { background: '#fef2f2', color: '#dc2626', border: '1px solid #fecaca' },
-  running: { background: '#fffbeb', color: '#d97706', border: '1px solid #fde68a' },
+  success: { background: '#EEF2FF', color: '#4338CA', border: '1px solid #818CF8' },
+  error: { background: '#FEF2F2', color: '#DC2626', border: '1px solid #FECACA' },
+  running: { background: '#FFF7ED', color: '#C2410C', border: '1px solid #FB923C' },
 }
 
 export default function DashboardPage() {
-  const [logs, setLogs]       = useState<Log[]>([])
-  const [filter, setFilter]   = useState('all')
+  const [logs, setLogs] = useState<Log[]>([])
+  const [filter, setFilter] = useState('all')
   const [selected, setSelected] = useState<Log | null>(null)
   const [loading, setLoading] = useState(true)
-  const [user, setUser]       = useState<any>(null)
+  const [user, setUser] = useState<any>(null)
   const router = useRouter()
 
   useEffect(() => {
@@ -64,9 +71,9 @@ export default function DashboardPage() {
   const filtered = filter === 'all' ? logs : logs.filter(l => l.status === filter)
 
   const stats = {
-    total:   logs.length,
+    total: logs.length,
     success: logs.filter(l => l.status === 'success').length,
-    error:   logs.filter(l => l.status === 'error').length,
+    error: logs.filter(l => l.status === 'error').length,
     running: logs.filter(l => l.status === 'running').length,
   }
 
@@ -78,7 +85,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <div style={{ background: '#fafafa', minHeight: '100vh', color: '#1a1a1a' }}>
+    <div style={{ background: C.off, minHeight: '100vh', color: C.text }}>
 
       {/* Log detail modal */}
       {selected && (
@@ -95,14 +102,14 @@ export default function DashboardPage() {
           <div
             onClick={e => e.stopPropagation()}
             style={{
-              background: '#ffffff', 
-              border: '1px solid #e5e7eb',
-              borderRadius: 20, 
-              width: '100%', 
+              background: C.white,
+              border: `1px solid ${C.gray}`,
+              borderRadius: 20,
+              width: '100%',
               maxWidth: 520,
-              maxHeight: '80vh', 
-              overflowY: 'auto', 
-              padding: 32, 
+              maxHeight: '80vh',
+              overflowY: 'auto',
+              padding: 32,
               position: 'relative',
               boxShadow: '0 25px 50px -12px rgba(0,0,0,0.15)'
             }}
@@ -110,8 +117,8 @@ export default function DashboardPage() {
             <button onClick={() => setSelected(null)} style={{
               position: 'absolute', top: 20, right: 20,
               width: 32, height: 32, borderRadius: '50%',
-              border: '1px solid #e5e7eb', background: '#f9fafb',
-              color: '#6b7280', cursor: 'pointer', fontSize: 14,
+              border: `1px solid ${C.gray}`, background: C.off,
+              color: C.muted, cursor: 'pointer', fontSize: 14,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               transition: 'all 0.2s'
             }}>✕</button>
@@ -121,16 +128,16 @@ export default function DashboardPage() {
                 fontSize: 11, padding: '4px 12px', borderRadius: 20, fontWeight: 600,
                 letterSpacing: '.02em', textTransform: 'uppercase', ...STATUS_STYLE[selected.status]
               }}>{selected.status}</span>
-              <span style={{ fontSize: 12, color: '#9ca3af', fontWeight: 500 }}>{selected.source}</span>
+              <span style={{ fontSize: 12, color: C.muted, fontWeight: 500 }}>{selected.source}</span>
             </div>
 
-            <h2 style={{ fontSize: 20, fontWeight: 600, color: '#111827', marginBottom: 8 }}>{selected.flow_name}</h2>
-            <p style={{ fontSize: 13, color: '#9ca3af', marginBottom: 24 }}>{formatTime(selected.created_at)}</p>
+            <h2 style={{ fontSize: 20, fontWeight: 600, color: C.text, marginBottom: 8 }}>{selected.flow_name}</h2>
+            <p style={{ fontSize: 13, color: C.muted, marginBottom: 24 }}>{formatTime(selected.created_at)}</p>
 
             <p style={{ fontSize: 11, color: '#059669', letterSpacing: '.08em', textTransform: 'uppercase', marginBottom: 10, fontWeight: 600 }}>Payload</p>
             <pre style={{
-              fontSize: 12, color: '#374151', background: '#f9fafb',
-              border: '1px solid #e5e7eb', borderRadius: 12,
+              fontSize: 12, color: '#374151', background: C.off,
+              border: `1px solid ${C.gray}`, borderRadius: 12,
               padding: 16, overflowX: 'auto', lineHeight: 1.7,
               fontFamily: 'ui-monospace, monospace'
             }}>
@@ -140,36 +147,27 @@ export default function DashboardPage() {
         </div>
       )}
 
-      {/* Navbar — same style as cv-client.tsx */}
-      <nav style={{
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '14px 24px',
-        borderBottom: '1px solid #E8EBE8',
-        background: '#FFFFFF',
-        position: 'sticky', top: 0, zIndex: 50
-      }}>
-        <a href="/" style={{ textDecoration: 'none', fontWeight: 700, fontSize: 18, letterSpacing: '.04em' }}>
-          <span style={{ color: '#171717' }}>N</span>
-          <span style={{ color: '#22C55E' }}>PH</span>
-        </a>
-        <div style={{ display: 'flex', gap: 4, background: '#F8FAF8', padding: '3px', borderRadius: 10, border: '1px solid #E8EBE8' }}>
-          <a href="/cv" style={{ display: 'inline-block', padding: '5px 16px', borderRadius: 8, fontSize: 12, cursor: 'pointer', border: 'none', letterSpacing: '.04em', textTransform: 'uppercase' as const, background: 'transparent', color: '#9CA39C', fontWeight: 500, textDecoration: 'none', lineHeight: '20px' }}>CV</a>
-          <span style={{ display: 'inline-block', padding: '5px 16px', borderRadius: 8, fontSize: 12, letterSpacing: '.04em', textTransform: 'uppercase' as const, background: '#22C55E', color: '#FFFFFF', fontWeight: 500, lineHeight: '20px' }}>Logs</span>
+      {/* ---- NAVBAR ---- */}
+      <nav style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 24px', borderBottom: `1px solid ${C.gray}`, background: C.white, position: 'sticky', top: 0, zIndex: 10 }}>
+        <div style={{ width: 34, height: 34, borderRadius: '50%', background: C.green, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 700, color: '#fff' }}>NPH</div>
+        <div style={{ display: 'flex', gap: 3, background: C.off, padding: '3px', borderRadius: 10, border: `1px solid ${C.gray}` }}>
+          <a href="/" style={{ padding: '5px 14px', borderRadius: 7, fontSize: 11, color: C.muted, textDecoration: 'none', fontWeight: 500 }}>CV</a>
+          <span style={{ padding: '5px 14px', borderRadius: 7, fontSize: 11, background: C.green, color: '#fff', fontWeight: 500 }}>Logs</span>
+          <a href="/tasks" style={{ padding: '5px 14px', borderRadius: 7, fontSize: 11, color: C.muted, textDecoration: 'none', fontWeight: 500 }}>Tasks</a>
         </div>
-        <button onClick={handleLogout} style={{
-          fontSize: 12, padding: '5px 16px',
-          border: '1px solid #E8EBE8', borderRadius: 8,
-          background: 'transparent', color: '#9CA39C', cursor: 'pointer', letterSpacing: '.04em'
-        }}>log out</button>
+        <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+          <span style={{ fontSize: 12, color: C.muted }}>{user?.email}</span>
+          <button onClick={handleLogout} style={{ fontSize: 11, padding: '5px 14px', border: `1px solid ${C.gray}`, borderRadius: 7, background: 'transparent', color: C.muted, cursor: 'pointer' }}>log out</button>
+        </div>
       </nav>
 
       {/* Header */}
       <div style={{ padding: '32px 32px 0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div>
-          <h1 style={{ fontSize: 28, fontWeight: 700, color: '#111827', letterSpacing: '-0.02em' }}>Automation Logs</h1>
-          <p style={{ fontSize: 14, color: '#9ca3af', marginTop: 6 }}>{user?.email}</p>
+          <h1 style={{ fontSize: 28, fontWeight: 700, color: C.text, letterSpacing: '-0.02em' }}>Automation Logs</h1>
+          <p style={{ fontSize: 14, color: C.muted, marginTop: 6 }}>{user?.email}</p>
         </div>
-        <div style={{ 
+        <div style={{
           display: 'flex', alignItems: 'center', gap: 8,
           background: '#ecfdf5', padding: '8px 16px', borderRadius: 24,
           border: '1px solid #a7f3d0'
@@ -182,19 +180,19 @@ export default function DashboardPage() {
       {/* Stats */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,minmax(0,1fr))', gap: 16, padding: '24px 32px' }}>
         {[
-          { label: 'Total runs', val: stats.total,   color: '#111827', bg: '#ffffff', borderColor: '#e5e7eb' },
-          { label: 'Success',    val: stats.success, color: '#059669', bg: '#ecfdf5', borderColor: '#a7f3d0' },
-          { label: 'Errors',     val: stats.error,   color: '#dc2626', bg: '#fef2f2', borderColor: '#fecaca' },
-          { label: 'Running',    val: stats.running, color: '#d97706', bg: '#fffbeb', borderColor: '#fde68a' },
+          { label: 'Total runs', val: stats.total, color: C.text, bg: '#ffffff', borderColor: '#e5e7eb' },
+          { label: 'Success', val: stats.success, color: '#059669', bg: '#ecfdf5', borderColor: '#a7f3d0' },
+          { label: 'Errors', val: stats.error, color: '#dc2626', bg: '#fef2f2', borderColor: '#fecaca' },
+          { label: 'Running', val: stats.running, color: '#d97706', bg: '#fffbeb', borderColor: '#fde68a' },
         ].map(s => (
-          <div key={s.label} style={{ 
-            background: s.bg, 
-            border: `1px solid ${s.borderColor}`, 
-            borderRadius: 16, 
+          <div key={s.label} style={{
+            background: s.bg,
+            border: `1px solid ${s.borderColor}`,
+            borderRadius: 16,
             padding: 20,
             transition: 'transform 0.2s, box-shadow 0.2s'
           }}>
-            <p style={{ fontSize: 11, color: '#6b7280', textTransform: 'uppercase', letterSpacing: '.08em', marginBottom: 8, fontWeight: 600 }}>{s.label}</p>
+            <p style={{ fontSize: 11, color: C.muted, textTransform: 'uppercase', letterSpacing: '.08em', marginBottom: 8, fontWeight: 600 }}>{s.label}</p>
             <p style={{ fontSize: 32, fontWeight: 700, color: s.color, letterSpacing: '-0.02em' }}>{s.val}</p>
           </div>
         ))}
@@ -202,7 +200,7 @@ export default function DashboardPage() {
 
       {/* Filter */}
       <div style={{ display: 'flex', gap: 10, padding: '0 32px 20px' }}>
-        {['all','success','error','running'].map(f => (
+        {['all', 'success', 'error', 'running'].map(f => (
           <button key={f} onClick={() => setFilter(f)} style={{
             fontSize: 12, padding: '8px 20px', borderRadius: 24, cursor: 'pointer',
             border: filter === f ? '1px solid #10b981' : '1px solid #e5e7eb',
@@ -216,18 +214,18 @@ export default function DashboardPage() {
       </div>
 
       {/* Log list */}
-      <div style={{ 
-        margin: '0 32px 32px', 
-        background: '#ffffff', 
-        borderRadius: 20, 
-        border: '1px solid #e5e7eb',
+      <div style={{
+        margin: '0 32px 32px',
+        background: C.white,
+        borderRadius: 20,
+        border: `1px solid ${C.gray}`,
         overflow: 'hidden'
       }}>
         {loading && (
-          <p style={{ padding: '40px', fontSize: 14, color: '#9ca3af', textAlign: 'center' }}>Loading...</p>
+          <p style={{ padding: '40px', fontSize: 14, color: C.muted, textAlign: 'center' }}>Loading...</p>
         )}
         {!loading && filtered.length === 0 && (
-          <p style={{ padding: '40px', fontSize: 14, color: '#9ca3af', textAlign: 'center' }}>ยังไม่มี log ในหมวดนี้</p>
+          <p style={{ padding: '40px', fontSize: 14, color: C.muted, textAlign: 'center' }}>ยังไม่มี log ในหมวดนี้</p>
         )}
         {filtered.map((log, index) => (
           <div
@@ -235,9 +233,9 @@ export default function DashboardPage() {
             onClick={() => setSelected(log)}
             style={{
               display: 'flex', alignItems: 'center', gap: 16,
-              padding: '16px 24px', 
+              padding: '16px 24px',
               borderBottom: index < filtered.length - 1 ? '1px solid #f3f4f6' : 'none',
-              cursor: 'pointer', 
+              cursor: 'pointer',
               transition: 'background 0.15s'
             }}
             onMouseEnter={e => (e.currentTarget.style.background = '#f9fafb')}
@@ -252,9 +250,9 @@ export default function DashboardPage() {
             <span style={{ flex: 1, fontSize: 14, fontWeight: 600, color: '#111827' }}>{log.flow_name}</span>
             <span style={{
               fontSize: 11, padding: '4px 12px', borderRadius: 20,
-              background: '#f3f4f6', border: '1px solid #e5e7eb', color: '#6b7280', fontWeight: 500
+              background: '#f3f4f6', border: `1px solid ${C.gray}`, color: C.muted, fontWeight: 500
             }}>{log.source}</span>
-            <span style={{ fontSize: 12, color: '#9ca3af', whiteSpace: 'nowrap', fontWeight: 500 }}>{formatTime(log.created_at)}</span>
+            <span style={{ fontSize: 12, color: C.muted, whiteSpace: 'nowrap', fontWeight: 500 }}>{formatTime(log.created_at)}</span>
           </div>
         ))}
       </div>
