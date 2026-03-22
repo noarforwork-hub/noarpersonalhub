@@ -110,6 +110,7 @@ function N8nFlow({ content }: { content: string }) {
 export default function SnippetsClient() {
     const [snippets, setSnippets] = useState<Snippet[]>([])
     const [user, setUser] = useState<any>(null)
+    const [authLoading, setAuthLoading] = useState(true)
     const [loaded, setLoaded] = useState(false)
     const [filter, setFilter] = useState<'all' | 'code' | 'prompt' | 'n8n'>('all')
     const [search, setSearch] = useState('')
@@ -128,7 +129,7 @@ export default function SnippetsClient() {
     const supabase = useMemo(() => createClient(), [])
 
     useEffect(() => {
-        supabase.auth.getUser().then(({ data }) => setUser(data.user))
+        supabase.auth.getUser().then(({ data }) => { setUser(data.user); setAuthLoading(false) })
     }, [supabase])
 
     useEffect(() => {
@@ -239,6 +240,8 @@ export default function SnippetsClient() {
         if (type === 'n8n') return { bg: '#FFF3E0', color: '#E65100', label: 'n8n' }
         return { bg: C.off, color: C.muted, label: type }
     }
+
+    if (authLoading) return <div style={{ minHeight: '100vh', background: C.off }} />
 
     if (!user) return (
         <div style={{ background: C.off, minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -361,11 +364,11 @@ export default function SnippetsClient() {
                     <div style={{ width: 34, height: 34, borderRadius: '50%', background: C.green, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 700, color: '#fff' }}>NPH</div>
                 </a>
                 <div style={{ display: 'flex', gap: 3, background: C.off, padding: '3px', borderRadius: 10, border: `1px solid ${C.gray}` }}>
-                    <a href="/cv" style={{ padding: '5px 14px', borderRadius: 7, fontSize: 11, background: 'transparent', color: C.muted, textDecoration: 'none', fontWeight: 500 }}>CV</a>
-                    <a href="/dashboard" style={{ padding: '5px 14px', borderRadius: 7, fontSize: 11, background: 'transparent', color: C.muted, textDecoration: 'none', fontWeight: 500 }}>Logs</a>
-                    <a href="/tasks" style={{ padding: '5px 14px', borderRadius: 7, fontSize: 11, background: 'transparent', color: C.muted, textDecoration: 'none', fontWeight: 500 }}>Tasks</a>
-                    <a href="/snippets" style={{ padding: '5px 14px', borderRadius: 7, fontSize: 11, background: C.green, color: '#fff', textDecoration: 'none', fontWeight: 500 }}>Snippets</a>
-                </div>
+          <a href="/cv" style={{ padding: '5px 14px', borderRadius: 7, fontSize: 11, background: 'transparent', color: C.muted, textDecoration: 'none', fontWeight: 500 }}>CV</a>
+          <a href="/dashboard" style={{ padding: '5px 14px', borderRadius: 7, fontSize: 11, background: 'transparent', color: C.muted, textDecoration: 'none', fontWeight: 500 }}>Logs</a>
+          <a href="/tasks" style={{ padding: '5px 14px', borderRadius: 7, fontSize: 11, background: 'transparent', color: C.muted, textDecoration: 'none', fontWeight: 500 }}>Tasks</a>
+          <a href="/snippets" style={{ padding: '5px 14px', borderRadius: 7, fontSize: 11, background: C.green, color: '#fff', textDecoration: 'none', fontWeight: 500 }}>Snippets</a>
+        </div>
                 <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
                   <span style={{ fontSize: 12, color: C.muted, marginRight: 8 }}>{user?.email}</span>
                 </div>
