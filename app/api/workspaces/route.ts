@@ -1,24 +1,16 @@
 import { createServerSupabase } from '@/lib/supabase-server'
 import { NextResponse } from 'next/server'
 
-export async function GET(req: Request) {
+export async function GET() {
     const supabase = await createServerSupabase()
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-    const { searchParams } = new URL(req.url)
-    const date = searchParams.get('date')
-
-    let query = supabase
-        .from('schedules')
-        .select('*')
+    const { data, error } = await supabase
+        .from('workspaces').select('*')
         .eq('user_id', user.id)
-        .order('date', { ascending: true })
-        .order('start_time', { ascending: true })
+        .order('updated_at', { ascending: false })
 
-    if (date) query = query.eq('date', date)
-
-    const { data, error } = await query
     if (error) return NextResponse.json({ error }, { status: 500 })
     return NextResponse.json(data)
 }
@@ -29,11 +21,27 @@ export async function POST(req: Request) {
     if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
     const body = await req.json()
-    const { data, error } = await supabase.from('schedules').insert({
+    const { data, error } = await supabase.from('workspaces').insert({
         ...body,
         user_id: user.id,
-        source: 'manual',
+        canvas_data: { nodes: [], edges: [] }
     }).select().single()
+
+    if (error) return NextResponse.json({ error }, { status: 500 })
+    return NextResponse.json(data)
+}
+
+export async function PATCH(req: Request) {
+    const supabase = await createServerSupabase()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+    const { id, ...updates } = await req.json()
+    const { data, error } = await supabase
+        .from('workspaces')
+        .update({ ...updates, updated_at: new Date().toISOString() })
+        .eq('id', id).eq('user_id', user.id)
+        .select().single()
 
     if (error) return NextResponse.json({ error }, { status: 500 })
     return NextResponse.json(data)
@@ -46,10 +54,8 @@ export async function DELETE(req: Request) {
 
     const { id } = await req.json()
     const { error } = await supabase
-        .from('schedules')
-        .delete()
-        .eq('id', id)
-        .eq('user_id', user.id)
+        .from('workspaces').delete()
+        .eq('id', id).eq('user_id', user.id)
 
     if (error) return NextResponse.json({ error }, { status: 500 })
     return NextResponse.json({ ok: true })

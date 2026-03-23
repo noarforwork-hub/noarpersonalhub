@@ -25,7 +25,7 @@ type Task = {
     skill_tags: string[]; work_tags: string[]; status: string
 }
 type Schedule = {
-    id: string; title: string; date: string
+    id: string; title: string; date: string; end_date?: string
     start_time: string; end_time: string
     source: string; work_tag: string
 }
@@ -51,7 +51,7 @@ export default function TasksClient() {
     })
     // Schedule form state
     const [sf, setSf] = useState({
-        title: '', date: selectedDate, start_time: '', end_time: '', work_tag: ''
+        title: '', date: selectedDate, end_date: '', start_time: '', end_time: '', work_tag: ''
     })
 
     const supabase = useMemo(() => createClient(), [])
@@ -67,9 +67,9 @@ export default function TasksClient() {
 
     useEffect(() => {
         if (!user) return
-        fetch(`/api/schedules?date=${selectedDate}`)
+        fetch(`/api/schedules`)
             .then(r => r.json()).then(setSchedules)
-    }, [user, selectedDate])
+    }, [user])
 
     async function addTask() {
         if (!tf.title || !tf.start_date || !tf.end_date) return
@@ -101,8 +101,8 @@ export default function TasksClient() {
             body: JSON.stringify(sf)
         })
         const sched = await res.json()
-        if (sched.date === selectedDate) setSchedules(prev => [...prev, sched])
-        setSf({ title: '', date: selectedDate, start_time: '', end_time: '', work_tag: '' })
+        setSchedules(prev => [...prev, sched].sort((a,b) => new Date(a.date).getTime() - new Date(b.date).getTime()))
+        setSf({ title: '', date: selectedDate, end_date: '', start_time: '', end_time: '', work_tag: '' })
         setShowSchedForm(false)
     }
 
@@ -113,7 +113,8 @@ export default function TasksClient() {
             return
         }
         const start = new Date(`${sched.date}T${sched.start_time || '09:00'}:00`)
-        const end = new Date(`${sched.date}T${sched.end_time || '10:00'}:00`)
+        const endDay = sched.end_date || sched.date
+        const end = new Date(`${endDay}T${sched.end_time || '10:00'}:00`)
         await fetch('https://www.googleapis.com/calendar/v3/calendars/primary/events', {
             method: 'POST',
             headers: { Authorization: `Bearer ${tokens.access_token}`, 'Content-Type': 'application/json' },
@@ -270,9 +271,15 @@ export default function TasksClient() {
                                     <label style={lbl}>ชื่อนัด</label>
                                     <input style={inp} value={sf.title} placeholder="Meeting, Call..." onChange={e => setSf({ ...sf, title: e.target.value })} />
                                 </div>
-                                <div style={{ marginBottom: 12 }}>
-                                    <label style={lbl}>วันที่</label>
-                                    <input type="date" style={inp} value={sf.date} onChange={e => setSf({ ...sf, date: e.target.value })} />
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 12 }}>
+                                    <div>
+                                        <label style={lbl}>วันที่เริ่ม</label>
+                                        <input type="date" style={inp} value={sf.date} onChange={e => setSf({ ...sf, date: e.target.value })} />
+                                    </div>
+                                    <div>
+                                        <label style={lbl}>วันที่สิ้นสุด</label>
+                                        <input type="date" style={inp} value={sf.end_date} onChange={e => setSf({ ...sf, end_date: e.target.value })} />
+                                    </div>
                                 </div>
                                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 12 }}>
                                     <div>
@@ -411,21 +418,21 @@ export default function TasksClient() {
                     {/* Schedule column */}
                     <div style={{ background: C.white, border: `0.5px solid ${C.gray}`, borderRadius: 12, overflow: 'hidden' }}>
                         <div style={{ padding: '12px 16px 10px', borderBottom: `1px solid ${C.gray}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                            <span style={{ fontSize: 11, fontWeight: 600, color: C.green, letterSpacing: '.06em', textTransform: 'uppercase' }}>Schedule</span>
+                            <span style={{ fontSize: 11, fontWeight: 600, color: C.green, letterSpacing: '.06em', textTransform: 'uppercase' }}>Upcoming Schedule</span>
                             <span style={{ fontSize: 11, color: C.muted }}>
-                                {new Date(selectedDate).toLocaleDateString('th-TH', { day: 'numeric', month: 'short' })}
+                                All
                             </span>
                         </div>
-                        {schedules.length === 0 && (
-                            <p style={{ padding: '20px 16px', fontSize: 13, color: C.muted, textAlign: 'center' }}>ไม่มีนัดในวันนี้</p>
+                        {schedules.filter(s => (s.end_date || s.date) >= new Date().toISOString().slice(0, 10)).length === 0 && (
+                            <p style={{ padding: '20px 16px', fontSize: 13, color: C.muted, textAlign: 'center' }}>ไม่มีนัดหมาย</p>
                         )}
-                        {schedules.map(s => (
+                        {schedules.filter(s => (s.end_date || s.date) >= new Date().toISOString().slice(0, 10)).map(s => (
                             <div key={s.id} style={{ padding: '10px 16px', borderBottom: `0.5px solid #F1F5F9`, display: 'flex', gap: 10 }}>
                                 <div style={{ width: 7, height: 7, borderRadius: '50%', background: s.source === 'google' ? '#4285F4' : C.green, marginTop: 5, flexShrink: 0 }} />
                                 <div style={{ flex: 1 }}>
                                     <div style={{ fontSize: 13, fontWeight: 500, color: C.text }}>{s.title}</div>
                                     <div style={{ fontSize: 11, color: C.muted, marginTop: 1 }}>
-                                        {s.start_time && s.end_time ? `${s.start_time} — ${s.end_time}` : 'ทั้งวัน'}
+                                        {new Date(s.date).toLocaleDateString('th-TH', { day: 'numeric', month: 'short' })} {s.end_date && s.end_date !== s.date ? ` - ${new Date(s.end_date).toLocaleDateString('th-TH', { day: 'numeric', month: 'short' })}` : ''} · {s.start_time && s.end_time ? `${s.start_time} — ${s.end_time}` : 'ทั้งวัน'}
                                     </div>
                                     <div style={{ display: 'flex', gap: 6, marginTop: 4, alignItems: 'center' }}>
                                         {s.work_tag && <span style={{ fontSize: 10, padding: '2px 8px', borderRadius: 20, background: C.gm, color: C.gd, border: `0.5px solid ${C.green}` }}>{s.work_tag}</span>}

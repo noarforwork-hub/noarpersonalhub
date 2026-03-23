@@ -13,6 +13,7 @@ This application serves as a centralized dashboard and toolkit:
 - **Automation Logs (`/dashboard`)**: A monitoring dashboard to track my automated workflows (such as those running via n8n or Python scripts), reporting successes, errors, and running states.
 - **Tasks & Schedules (`/tasks`)**: A personal task management system with calendar integration, allowing me to organize to-do lists, schedule events, and push schedules directly to Google Calendar.
 - **Snippets Library (`/snippets`)**: A curated collection of frequently used code (Python, SQL, JavaScript), AI prompts, and n8n JSON workflows, complete with syntax highlighting and one-click copy functionality.
+- **Visual Workspace (`/workspace`)**: An interactive node-based canvas (using React Flow) for brainstorming, mapping out processes, planning workflows, and saving visual notes.
 
 ## 🛠️ Tech Stack
 
