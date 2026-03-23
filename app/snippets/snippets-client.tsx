@@ -368,6 +368,7 @@ export default function SnippetsClient() {
           <a href="/dashboard" style={{ padding: '5px 14px', borderRadius: 7, fontSize: 11, background: 'transparent', color: C.muted, textDecoration: 'none', fontWeight: 500 }}>Logs</a>
           <a href="/tasks" style={{ padding: '5px 14px', borderRadius: 7, fontSize: 11, background: 'transparent', color: C.muted, textDecoration: 'none', fontWeight: 500 }}>Tasks</a>
           <a href="/snippets" style={{ padding: '5px 14px', borderRadius: 7, fontSize: 11, background: C.green, color: '#fff', textDecoration: 'none', fontWeight: 500 }}>Snippets</a>
+          <a href="/workspace" style={{ padding: '5px 14px', borderRadius: 7, fontSize: 11, background: 'transparent', color: C.muted, textDecoration: 'none', fontWeight: 500 }}>Workspace</a>
         </div>
                 <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
                   <span style={{ fontSize: 12, color: C.muted, marginRight: 8 }}>{user?.email}</span>
