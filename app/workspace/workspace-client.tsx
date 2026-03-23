@@ -487,7 +487,7 @@ export default function WorkspaceClient() {
                                 style={{ background: C.off }}
                             >
                                 <Background color="#D1D5DB" gap={20} size={1} />
-                                <Controls style={{ button: { background: C.white, border: `1px solid ${C.gray}`, color: C.muted } }} />
+                                <Controls style={{ background: C.white, border: `1px solid ${C.gray}` }} />
                                 <MiniMap style={{ background: C.white, border: `1px solid ${C.gray}` }} nodeColor={n => n.type === 'block' ? C.green : C.muted} />
                             </ReactFlow>
                         </div>
